@@ -119,6 +119,104 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &608487165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 608487166}
+  - component: {fileID: 608487169}
+  - component: {fileID: 608487168}
+  - component: {fileID: 608487167}
+  m_Layer: 5
+  m_Name: helmet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &608487166
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608487165}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1714597075}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &608487167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608487165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52781ccce80a44fa951191fe8c6b7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 1481702423}
+  canvas: {fileID: 1714597074}
+  helmetRect: {fileID: 608487166}
+  smoothing: 12
+  hideAfterSecondsWithoutData: 0.5
+  mirrorX: 0
+  widthMultiplier: 3.7
+  upFromEars: 0.1
+  crownDown: 0.04
+  rotateWithEars: 0
+--- !u!114 &608487168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608487165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: dd56422de091b41348ed5625df235584, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &608487169
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608487165}
+  m_CullTransparentMesh: 1
 --- !u!1 &663148958
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,7 +529,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1481702422}
-  - component: {fileID: 1481702421}
+  - component: {fileID: 1481702423}
   m_Layer: 0
   m_Name: body
   m_TagString: Untagged
@@ -439,27 +537,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1481702421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1481702420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28392df63ed4b4197a655cb2e56a3b7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 5065
-  dataTimeout: 0.2
-  is_pinching: 0
-  pointerPosition: {x: 0, y: 0}
-  inActivationZone: 0
-  inGoBackZone: 0
-  lastUpdateTime: 0
-  bodyLandmarks: []
-  bodyDetected: 0
 --- !u!4 &1481702422
 Transform:
   m_ObjectHideFlags: 0
@@ -475,6 +552,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1481702423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481702420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68744edfee1549839bc0d24db7cd3c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 5065
+  dataTimeout: 0.2
+  pointerPosition: {x: 0, y: 0}
+  is_pinching: 0
+  is_fist: 0
+  inActivationZone: 0
+  inGoBackZone: 0
+  bodyLandmarks: []
+  bodyDetected: 0
+  leftHandLandmarks: []
+  rightHandLandmarks: []
+  leftHandDetected: 0
+  rightHandDetected: 0
+  lastUpdateTime: 0
 --- !u!1 &1600560556
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +591,7 @@ GameObject:
   - component: {fileID: 1600560558}
   - component: {fileID: 1600560560}
   m_Layer: 5
-  m_Name: Image
+  m_Name: cloth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -563,7 +666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee64c3608024f4c6dacb6ad44cdb4ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 1481702421}
+  body: {fileID: 1481702423}
   canvas: {fileID: 1714597074}
   clothingRect: {fileID: 1600560557}
   smoothing: 12
@@ -623,15 +726,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13307f60bf4543e2ba927d2040a2c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 1481702421}
+  body: {fileID: 1481702423}
   canvas: {fileID: 1714597074}
   glassesRect: {fileID: 1637241422}
   smoothing: 12
   hideAfterSecondsWithoutData: 0.5
-  mirrorX: 1
+  mirrorX: 0
   widthMultiplier: 3.2
   verticalOffset: 0.08
-  rotateWithEyes: 1
+  rotateWithEyes: 0
 --- !u!114 &1637241424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,6 +871,7 @@ RectTransform:
   - {fileID: 1784285434}
   - {fileID: 1600560557}
   - {fileID: 1637241422}
+  - {fileID: 608487166}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

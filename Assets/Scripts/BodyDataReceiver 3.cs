@@ -58,7 +58,9 @@ public class BodyDataReceiver : MonoBehaviour
 
             // ----- body (pose) landmarks -----
             bodyLandmarks.Clear();
-            bodyDetected = data.body_landmarks != null && data.body_landmarks.Length > 0;
+            // bodyDetected = data.body_landmarks != null && data.body_landmarks.Length > 0;
+            int poseCount = (data.body_landmarks != null) ? data.body_landmarks.Length : 0;
+            bodyDetected = poseCount >= 33;  
             if (bodyDetected)
             {
                 foreach (var lm in data.body_landmarks)
