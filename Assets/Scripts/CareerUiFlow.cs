@@ -1,3 +1,5 @@
+using System;                          // ✅ needed for Array.IndexOf
+using System.Collections.Generic;      // ✅ needed for List<T>
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,6 +7,9 @@ using UnityEngine.Events;
 
 public class CareerUiFlow : MonoBehaviour
 {
+    public VirtualKeyboardController keyboard;
+    public HandDwellSelectable searchButton;
+
     [Header("Data")]
     public FacultyConfig[] faculties;
     public BodyDataReceiver body;              // drag your BodyDataReceiver here
@@ -47,13 +52,132 @@ public class CareerUiFlow : MonoBehaviour
     void Start()
     {
         // overlays know canvas + mirror
-        if (shirtOverlay)  { shirtOverlay.canvas = canvas;   shirtOverlay.mirrorX = mirrorX; }
-        if (glassesOverlay){ glassesOverlay.canvas = canvas; glassesOverlay.mirrorX = mirrorX; }
-        if (helmetOverlay) { helmetOverlay.canvas = canvas;  helmetOverlay.mirrorX = mirrorX; }
+        if (shirtOverlay) { shirtOverlay.canvas = canvas; shirtOverlay.mirrorX = mirrorX; }
+        if (glassesOverlay) { glassesOverlay.canvas = canvas; glassesOverlay.mirrorX = mirrorX; }
+        if (helmetOverlay) { helmetOverlay.canvas = canvas; helmetOverlay.mirrorX = mirrorX; }
 
-        clickMode = false;  
+        clickMode = false;
         SetInputMode(false);
         ShowFacultyList();
+
+        // --- Keyboard wiring ---
+        if (keyboard)
+        {
+            // event-style (optional)
+            keyboard.OnSubmit += OnSearchSubmitted;                 // ENTER from keyboard
+            keyboard.OnClosed += () => menuBar.gameObject.SetActive(true);
+
+            // dwell/select on the search icon → open (hides the menubar & shows keyboard)
+            if (searchButton)
+                searchButton.onSelected.AddListener(OpenSearch);    // ✅ call OpenSearch(), not Show()
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (keyboard) keyboard.OnSubmit -= OnSearchSubmitted;
+    }
+
+    public void OpenSearch()
+    {
+        if (menuBar) menuBar.gameObject.SetActive(false);
+        keyboard.Show(OnSearchSubmitted, () => { if (menuBar) menuBar.gameObject.SetActive(true); });
+    }
+
+    void OnSearchSubmitted(string query)
+    {
+        // bring the bar back
+        if (menuBar) menuBar.gameObject.SetActive(true);
+
+        // choose which list to show:
+        var q = (query ?? "").Trim().ToLowerInvariant();
+        var matchedCareers = new List<CareerConfig>();
+        var matchedFaculties = new List<FacultyConfig>();
+
+        foreach (var f in faculties)
+        {
+            bool facultyHit = (!string.IsNullOrEmpty(f.displayName) && f.displayName.ToLowerInvariant().Contains(q))
+                           || (!string.IsNullOrEmpty(f.facultyId)   && f.facultyId.ToLowerInvariant().Contains(q));
+
+            if (facultyHit) matchedFaculties.Add(f);
+
+            if (f.careers != null)
+                foreach (var c in f.careers)
+                    if (!string.IsNullOrEmpty(c.displayName) && c.displayName.ToLowerInvariant().Contains(q))
+                        matchedCareers.Add(c);
+        }
+
+        if (matchedCareers.Count > 0)
+        {
+            mode = Mode.Career;
+            if (backButton)
+            {
+                backButton.gameObject.SetActive(true);
+                backButton.onClick.RemoveAllListeners();
+                backButton.onClick.AddListener(() => ShowFacultyList());
+            }
+
+            BuildCareerButtons(matchedCareers.ToArray());
+            if (!clickMode) PrimeMenuCooldown(0.75f);
+        }
+        else if (matchedFaculties.Count > 0)
+        {
+            mode = Mode.Faculty;
+            currentFaculty = -1; currentCareer = -1;
+            BuildFacultyButtonsFiltered(matchedFaculties.ToArray());
+            if (backButton) backButton.gameObject.SetActive(false);
+            if (!clickMode) PrimeMenuCooldown(0.75f);
+        }
+        else
+        {
+            ShowFacultyList();
+        }
+    }
+
+    void ShowFacultyListFiltered(FacultyConfig[] filtered)
+    {
+        mode = Mode.Faculty;
+        currentFaculty = -1;
+        currentCareer  = -1;
+
+        BuildFacultyButtonsFiltered(filtered);
+        if (backButton) backButton.gameObject.SetActive(false);
+
+        if (infoCard)  infoCard.SetActive(false);
+        if (salaryCard) salaryCard.SetActive(false);
+        SetOverlaysActive(false, false, false);
+    }
+
+    void BuildFacultyButtonsFiltered(FacultyConfig[] list)
+    {
+        ClearMenuBar();
+        var content = menuBar.content;
+
+        for (int i = 0; i < list.Length; i++)
+        {
+            var f = list[i];
+            var go = Instantiate(facultyButtonPrefab, content);
+            go.name = "Faculty_" + (string.IsNullOrEmpty(f.displayName) ? f.facultyId : f.displayName);
+
+            var iconTr = go.transform.Find("Icon") ?? go.transform.Find("icon");
+            if (iconTr)
+            {
+                var iconImg = iconTr.GetComponent<Image>();
+                if (iconImg)
+                {
+                    iconImg.sprite = f.icon;
+                    iconImg.color = Color.white;
+                    iconImg.enabled = (iconImg.sprite != null);
+                    iconImg.raycastTarget = false;
+                }
+            }
+
+            int idxLocal = Array.IndexOf(faculties, f); // map back to master index
+            go.GetComponent<Button>().onClick.AddListener(() => SelectFaculty(idxLocal));
+            ConfigureDwell(go, () => SelectFaculty(idxLocal));
+        }
+
+        menuBar.horizontalNormalizedPosition = 0f;
     }
 
     public void SetInputMode(bool useClick)
@@ -62,8 +186,6 @@ public class CareerUiFlow : MonoBehaviour
         if (handScroll) handScroll.enabled = !useClick;
         Cursor.visible = useClick;
 
-        // If you toggle modes at runtime and buttons already exist,
-        // update all HandDwellSelectable components:
         if (menuBar && menuBar.content)
         {
             foreach (var sel in menuBar.content.GetComponentsInChildren<HandDwellSelectable>(true))
@@ -71,7 +193,6 @@ public class CareerUiFlow : MonoBehaviour
         }
     }
 
-    // Prevent instant auto-select when a menu appears
     void PrimeMenuCooldown(float seconds)
     {
         if (!menuBar || !menuBar.content) return;
@@ -98,7 +219,6 @@ public class CareerUiFlow : MonoBehaviour
             var go = Instantiate(facultyButtonPrefab, content);
             go.name = "Faculty_" + (string.IsNullOrEmpty(f.displayName) ? f.facultyId : f.displayName);
 
-            // set ICON on child "Icon"
             var iconTr = go.transform.Find("Icon") ?? go.transform.Find("icon");
             if (iconTr)
             {
@@ -108,7 +228,7 @@ public class CareerUiFlow : MonoBehaviour
                     iconImg.color = Color.white;
                     iconImg.sprite = f.icon;
                     iconImg.enabled = (iconImg.sprite != null);
-                    iconImg.raycastTarget = false; // icon must not block clicks/dwell
+                    iconImg.raycastTarget = false;
                 }
             }
             else
@@ -136,7 +256,6 @@ public class CareerUiFlow : MonoBehaviour
             var go  = Instantiate(careerButtonPrefab, content);
             go.name = "Career_" + cfg.displayName;
 
-            // label (TMP or legacy Text) on child "Label"
             var labelTr = go.transform.Find("Label");
             var tmp = labelTr ? labelTr.GetComponent<TMP_Text>() : null;
             var txt = labelTr ? labelTr.GetComponent<Text>()     : null;
@@ -165,49 +284,32 @@ public class CareerUiFlow : MonoBehaviour
         sel.viewport = menuBar ? menuBar.viewport : null;
         sel.mirrorX = mirrorX;
 
-        // -------- FIX 1: don't require explicit hand flags ----------
-        // Your BodyDataReceiver doesn't publish left/right hand booleans,
-        // so let pointer presence count as presence.
-        sel.requireHandDetected = false;   // <— turn this OFF
-        sel.allowPointerAsPresence = true;   // <— leave this ON as fallback
-
-        // Keep palm-only dwell (no pinch) and give it a bit of debounce
+        sel.requireHandDetected = true;
+        sel.allowPointerAsPresence = false;
         sel.onlyPalm = true;
-        sel.pinchDebounceSec = 0.12f;
+        sel.pinchDebounceSec = 0.20f;
 
-        // A more forgiving hitbox and grace
-        sel.enterPaddingPx = 60f;   // <— bigger = easier to enter
-        sel.exitPaddingPx = 40f;   // <— hysteresis so it won’t flicker
-        sel.graceSeconds = 0.40f; // <— brief off-screen wiggle won’t reset
+        sel.palmDelaySeconds = 3.0f;           // ring shows only after 3s steady palm
+        sel.resetProgressOnPinch = true;       // pinch for scrolling won't contribute
 
-        // 2 sec dwell (or whatever you want)
-        sel.dwellSeconds = 2.0f;
+        sel.dwellSeconds = 2.0f;               // fill time AFTER the 3s delay
+        sel.resetSeconds = 2.0f;
 
-        // -------- FIX 2: find "ring" OR "Ring" ----------
+        sel.enterPaddingPx = 60f;
+        sel.exitPaddingPx  = 40f;
+        sel.graceSeconds   = 0.40f;
+        sel.requireEnterFromOutside = true;
+        sel.spawnBlockSeconds = 0.75f;
+
         if (!sel.progressRing)
         {
             var tr = go.transform.Find("ring") ?? go.transform.Find("Ring");
             if (tr) sel.progressRing = tr.GetComponent<Image>();
         }
 
-        sel.requireHandDetected = true;        // now that BodyDataReceiver exposes presence
-        sel.allowPointerAsPresence = false;
-
-        sel.palmDelaySeconds = 2.0f;           // <-- your requirement
-        sel.resetProgressOnPinch = true;       // scrolling never contributes
-
-        sel.onlyPalm = true;                    // ignore pinch for dwell
-        sel.enterPaddingPx = 60f;
-        sel.exitPaddingPx  = 40f;
-        sel.graceSeconds   = 0.40f;
-
-        sel.dwellSeconds = 2.0f;               // fill time AFTER the 3s palm delay
-        sel.resetSeconds = 2.0f;
-
-        sel.requireEnterFromOutside = true;
-        sel.spawnBlockSeconds = 0.75f;
+        sel.onSelected.RemoveAllListeners();
+        sel.onSelected.AddListener(onSelect);
     }
-
 
     // ---------- VIEW SWITCHES ----------
     void ShowFacultyList()
@@ -241,8 +343,6 @@ public class CareerUiFlow : MonoBehaviour
         if (infoCard) infoCard.SetActive(false);
         if (salaryCard) salaryCard.SetActive(false);
         SetOverlaysActive(false, false, false);
-        
-        backButton.GetComponent<HandDwellSelectable>()?.StartCooldown(0.75f);
     }
 
     // ---------- SELECTIONS ----------
@@ -271,49 +371,39 @@ public class CareerUiFlow : MonoBehaviour
         var sel = backButton.GetComponent<HandDwellSelectable>();
         if (!sel) sel = backButton.gameObject.AddComponent<HandDwellSelectable>();
 
-        sel.enabled = !clickMode;                           // dwell only when not in click mode
+        sel.enabled = !clickMode;
         sel.body = body ? body : FindAnyObjectByType<BodyDataReceiver>();
         sel.canvas = canvas;
         sel.mirrorX = mirrorX;
 
-        // IMPORTANT: back button typically sits outside the scroll viewport → leave null
-        sel.viewport = null;
+        sel.viewport = null; // back button often outside scroll view
 
-        // Make it behave like your menu items:
-        sel.requireHandDetected = true;   // use BodyDataReceiver.HandPresentWithGrace(...)
+        sel.requireHandDetected = true;
         sel.allowPointerAsPresence = false;
         sel.onlyPalm = true;
         sel.pinchDebounceSec = 0.20f;
 
-        // Palm must be steady here BEFORE the ring even appears:
-        sel.palmDelaySeconds = 3.0f;   // ⬅️ your requirement
+        sel.palmDelaySeconds = 3.0f;
         sel.resetProgressOnPinch = true;
 
-        // After the 3s palm delay, ring fills for:
-        sel.dwellSeconds = 2.0f;   // match your items
+        sel.dwellSeconds = 2.0f;
         sel.resetSeconds = 2.0f;
 
-        // Stability/anti-auto-select (same as items)
         sel.enterPaddingPx = 60f;
         sel.exitPaddingPx = 40f;
         sel.graceSeconds = 0.40f;
         sel.requireEnterFromOutside = true;
         sel.spawnBlockSeconds = 0.75f;
 
-        // Auto-find the ring (works for "ring" OR "Ring")
         if (!sel.progressRing)
         {
             var tr = backButton.transform.Find("ring") ?? backButton.transform.Find("Ring");
             if (tr) sel.progressRing = tr.GetComponent<Image>();
         }
 
-        // What happens on select: call the normal button click (which we wire to ShowFacultyList)
         sel.onSelected.RemoveAllListeners();
         sel.onSelected.AddListener(() => backButton.onClick.Invoke());
     }
-
-
-
 
     // ---------- APPLY DATA ----------
     void ApplyCareer(CareerConfig cfg)
@@ -358,7 +448,8 @@ public class CareerUiFlow : MonoBehaviour
             if (img) img.sprite = cfg.helmetSprite;
             helmetOverlay.widthMultiplier = cfg.helmetWidthMultiplier;
             helmetOverlay.upFromEars      = cfg.helmetUpFromEars;
-            helmetOverlay.crownDown       = cfg.helmetCrownDown;
+            // If your CareerConfig doesn't have this next field, remove the line:
+            // helmetOverlay.crownDown       = cfg.helmetCrownDown;
             helmetOverlay.gameObject.SetActive(cfg.helmetSprite != null);
         }
     }
