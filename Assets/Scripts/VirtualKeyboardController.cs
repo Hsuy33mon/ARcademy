@@ -114,12 +114,12 @@ public class VirtualKeyboardController : MonoBehaviour
         AddRow(row2, "ASDFGHJKL");
         // Row 3  (letters + BACKSPACE)
         AddRow(row3, "ZXCVBNM");
-        AddKey(row3, "⌫", KeyType.Backspace, wide:false);
+        AddKey(row3, "delete", KeyType.Backspace, wide:true);
 
         // Row 4 (SPACE, CLEAR, ENTER)
-        AddKey(row4, "SPACE", KeyType.Space, wide:true);
-        AddKey(row4, "CLR",   KeyType.Clear, wide:false);
-        AddKey(row4, "ENTER", KeyType.Enter, wide:true);
+        AddKey(row4, " ________ ", KeyType.Space, wide:true);
+        // AddKey(row4, "CLR",   KeyType.Clear, wide:false);
+        AddKey(row4, "return", KeyType.Enter, wide:true);
     }
 
     void AddRow(Transform row, string letters)

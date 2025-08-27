@@ -86,26 +86,58 @@ public class CareerUiFlow : MonoBehaviour
 
     void OnSearchSubmitted(string query)
     {
-        // bring the bar back
         if (menuBar) menuBar.gameObject.SetActive(true);
 
-        // choose which list to show:
-        var q = (query ?? "").Trim().ToLowerInvariant();
-        var matchedCareers = new List<CareerConfig>();
-        var matchedFaculties = new List<FacultyConfig>();
+        string q = (query ?? "").Trim();
+        if (string.IsNullOrEmpty(q)) { ShowFacultyList(); return; }
 
+        // ---- collect faculties by (name/id) OR (career match) ----
+        var filtered = new List<FacultyConfig>();
+        var seen = new HashSet<FacultyConfig>();
+
+        bool ContainsIC(string hay, string needle)
+        {
+            if (string.IsNullOrEmpty(needle)) return true;
+            if (string.IsNullOrEmpty(hay)) return false;
+            return hay.IndexOf(needle, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        // preserve the order of the master 'faculties' array
         foreach (var f in faculties)
         {
-            bool facultyHit = (!string.IsNullOrEmpty(f.displayName) && f.displayName.ToLowerInvariant().Contains(q))
-                           || (!string.IsNullOrEmpty(f.facultyId)   && f.facultyId.ToLowerInvariant().Contains(q));
+            bool byName = ContainsIC(f.displayName, q) || ContainsIC(f.facultyId, q);
 
-            if (facultyHit) matchedFaculties.Add(f);
+            bool byCareer = false;
+            if (f.careers != null)
+            {
+                foreach (var c in f.careers)
+                {
+                    if (ContainsIC(c.displayName, q)) { byCareer = true; break; }
+                }
+            }
 
+            if (byName || byCareer)
+            {
+                if (seen.Add(f)) filtered.Add(f);
+            }
+        }
+
+        // If any faculty matches (by name or via its careers) → show only those faculties
+        if (filtered.Count > 0)
+        {
+            ShowFacultyListFiltered(filtered.ToArray());
+            if (!clickMode) PrimeMenuCooldown(0.75f);
+            return;
+        }
+
+        // Otherwise, as a fallback, show a flat career list (rare for your use case)
+        var matchedCareers = new List<CareerConfig>();
+        foreach (var f in faculties)
             if (f.careers != null)
                 foreach (var c in f.careers)
-                    if (!string.IsNullOrEmpty(c.displayName) && c.displayName.ToLowerInvariant().Contains(q))
+                    if (!string.IsNullOrEmpty(c.displayName) &&
+                        c.displayName.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0)
                         matchedCareers.Add(c);
-        }
 
         if (matchedCareers.Count > 0)
         {
@@ -117,15 +149,8 @@ public class CareerUiFlow : MonoBehaviour
                 backButton.onClick.AddListener(() => ShowFacultyList());
             }
 
-            BuildCareerButtons(matchedCareers.ToArray());
-            if (!clickMode) PrimeMenuCooldown(0.75f);
-        }
-        else if (matchedFaculties.Count > 0)
-        {
-            mode = Mode.Faculty;
-            currentFaculty = -1; currentCareer = -1;
-            BuildFacultyButtonsFiltered(matchedFaculties.ToArray());
-            if (backButton) backButton.gameObject.SetActive(false);
+            activeCareers = matchedCareers.ToArray();   // ⬅️ important (see fix #2)
+            BuildCareerButtons(activeCareers);
             if (!clickMode) PrimeMenuCooldown(0.75f);
         }
         else
@@ -247,6 +272,7 @@ public class CareerUiFlow : MonoBehaviour
 
     void BuildCareerButtons(CareerConfig[] list)
     {
+        // activeCareers = list ?? Array.Empty<CareerConfig>();
         ClearMenuBar();
         var content = menuBar.content;
 

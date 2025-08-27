@@ -16,9 +16,9 @@ MonoBehaviour:
   description: Collect/clean data, build ML models, analyze patterns, advise business
     teams.
   salaryRegion: Bangkok
-  salaryEntry: Baht 40,000-60,000
-  salaryMid: Baht 70,000-90,000
-  salarySenior: Baht 100,000-130,000
+  salaryEntry: Baht 28,000-38,000
+  salaryMid: Baht 50,000-80,000
+  salarySenior: Baht 100,000-150,000
   shirtSprite: {fileID: 0}
   glassesSprite: {fileID: 0}
   helmetSprite: {fileID: 0}
