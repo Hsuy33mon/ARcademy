@@ -48,6 +48,19 @@ public class CareerUiFlow : MonoBehaviour
     int currentFaculty = -1;
     int currentCareer  = -1;
     CareerConfig[] activeCareers = new CareerConfig[0];
+    [Header("Page HUD")]
+    public GameObject careerTopBar;
+    public GameObject logoBtn;
+
+    public FacultyConfig CurrentFaculty
+    {
+        get
+        {
+            if (currentFaculty >= 0 && currentFaculty < faculties.Length)
+                return faculties[currentFaculty];
+            return null;
+        }
+    }
 
     void Start()
     {
@@ -82,6 +95,11 @@ public class CareerUiFlow : MonoBehaviour
     {
         if (menuBar) menuBar.gameObject.SetActive(false);
         keyboard.Show(OnSearchSubmitted, () => { if (menuBar) menuBar.gameObject.SetActive(true); });
+    }
+
+    void SetLogoVisible(bool on)
+    {
+        if (logoBtn) logoBtn.SetActive(on);
     }
 
     void OnSearchSubmitted(string query)
@@ -157,20 +175,24 @@ public class CareerUiFlow : MonoBehaviour
         {
             ShowFacultyList();
         }
+        if (careerTopBar) careerTopBar.SetActive(false);
+
     }
 
     void ShowFacultyListFiltered(FacultyConfig[] filtered)
     {
         mode = Mode.Faculty;
         currentFaculty = -1;
-        currentCareer  = -1;
+        currentCareer = -1;
 
         BuildFacultyButtonsFiltered(filtered);
         if (backButton) backButton.gameObject.SetActive(false);
 
-        if (infoCard)  infoCard.SetActive(false);
+        if (infoCard) infoCard.SetActive(false);
         if (salaryCard) salaryCard.SetActive(false);
         SetOverlaysActive(false, false, false);
+        if (careerTopBar) careerTopBar.SetActive(false);
+        SetLogoVisible(true);
     }
 
     void BuildFacultyButtonsFiltered(FacultyConfig[] list)
@@ -342,14 +364,16 @@ public class CareerUiFlow : MonoBehaviour
     {
         mode = Mode.Faculty;
         currentFaculty = -1;
-        currentCareer  = -1;
+        currentCareer = -1;
 
         BuildFacultyButtons();
         if (backButton) backButton.gameObject.SetActive(false);
 
-        if (infoCard)  infoCard.SetActive(false);
+        if (infoCard) infoCard.SetActive(false);
         if (salaryCard) salaryCard.SetActive(false);
         SetOverlaysActive(false, false, false);
+        if (careerTopBar) careerTopBar.SetActive(false);
+        SetLogoVisible(true);
     }
 
     void ShowCareerList()
@@ -369,6 +393,7 @@ public class CareerUiFlow : MonoBehaviour
         if (infoCard) infoCard.SetActive(false);
         if (salaryCard) salaryCard.SetActive(false);
         SetOverlaysActive(false, false, false);
+        SetLogoVisible(false);
     }
 
     // ---------- SELECTIONS ----------
@@ -377,6 +402,7 @@ public class CareerUiFlow : MonoBehaviour
         if (idx < 0 || idx >= faculties.Length) return;
 
         currentFaculty = idx;
+        if (careerTopBar) careerTopBar.SetActive(true); 
         activeCareers  = faculties[idx].careers ?? new CareerConfig[0];
 
         ShowCareerList();
@@ -388,6 +414,7 @@ public class CareerUiFlow : MonoBehaviour
         if (activeCareers == null || idx < 0 || idx >= activeCareers.Length) return;
         currentCareer = idx;
         ApplyCareer(activeCareers[idx]);
+        SetLogoVisible(false);
     }
 
     void ConfigureBackButtonDwell()

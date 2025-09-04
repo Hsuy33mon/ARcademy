@@ -23,3 +23,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51bd29ce3920b457da23422cfee6a198, type: 2}
   - {fileID: 11400000, guid: 9057a5ff9060e4a78b300c55e0790dc8, type: 2}
   - {fileID: 11400000, guid: 5c81146ff853e480090246a6d7d639ef, type: 2}
+  programDetails: 
+  programHero: {fileID: 0}
+  tuitionYear1: 179,300
+  tuitionYear2: 194,300
+  tuitionYear3: 187,000
+  tuitionYear4: 95,500
