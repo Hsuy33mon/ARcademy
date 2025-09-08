@@ -23,8 +23,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51bd29ce3920b457da23422cfee6a198, type: 2}
   - {fileID: 11400000, guid: 9057a5ff9060e4a78b300c55e0790dc8, type: 2}
   - {fileID: 11400000, guid: 5c81146ff853e480090246a6d7d639ef, type: 2}
-  programDetails: 
+  programDetails: "Undergraduates will find that our BSCS program emphasizes on developing
+    the practicality of the knowledge to real-world use. Students learn not only
+    the fundamentals of computer science, but also vigorously on how the knowledge
+    can be applied. Classrooms, learning facilities, and research labs collaborate
+    hand-in-hand to make this happen, as you will find that students learn not only
+    inside the classroom. CS faculty members maintain an extensive technology network
+    in industrial partners so that \u201Creal-world\u201D practices are truly real-world
+    and bring out the most optimal benefits for the students.\nFirst, our candidates
+    begin with the masteries of computer programming and the essences of computer
+    science. Then, whether their interest is in creating software innovations, getting
+    a software engineering career in big tech companies, or furthering their study
+    in postgraduate levels, students can select to pursue their track of elective
+    courses that fits their needs, spending their senior year working on real-world
+    projects or software innovations."
   programHero: {fileID: 0}
+  programWebsiteUrl: https://vmes.au.edu/2022-bscs-653/
   tuitionYear1: 179,300
   tuitionYear2: 194,300
   tuitionYear3: 187,000

@@ -13,9 +13,10 @@ public class FacultyConfig : ScriptableObject
     [Header("Careers in this faculty")]
     public CareerConfig[] careers;
 
-    [Header("Program Details (per faculty)")]
-    [TextArea(4,10)] public string programDetails;
+    [Header("Program Details")]
+    [TextArea(4,10000)] public string programDetails;
     public Sprite programHero;
+    public string programWebsiteUrl; 
 
     [Header("Tuition Fees (per faculty)")]
     public string tuitionYear1;
