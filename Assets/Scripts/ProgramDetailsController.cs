@@ -1,5 +1,5 @@
-using System;                          // ✅ needed for Array.IndexOf
-using System.Collections.Generic;      // ✅ needed for List<T>
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
