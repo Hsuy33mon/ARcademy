@@ -15,4 +15,29 @@ MonoBehaviour:
   facultyId: AE
   displayName: 'Aeronautics Engineering '
   icon: {fileID: 21300000, guid: 111a859d263a344219346ab68e189786, type: 3}
-  careers: []
+  careers:
+  - {fileID: 11400000, guid: d1e25d2e05b854793a84363226e7d441, type: 2}
+  - {fileID: 11400000, guid: d8ebcf0b93f6949cf8cb3096d334b215, type: 2}
+  - {fileID: 11400000, guid: 75553aea711b54295bdce9150a5107a4, type: 2}
+  - {fileID: 11400000, guid: 85208de7fc0a948c89124526f9f257a5, type: 2}
+  - {fileID: 11400000, guid: 3674ae5b0da204df6bfd5fbbafecdece, type: 2}
+  - {fileID: 11400000, guid: d19d8864b8f964768bb4e01a50e35d91, type: 2}
+  - {fileID: 11400000, guid: 03673bce89c3247b39b9318c13984b11, type: 2}
+  - {fileID: 11400000, guid: 57be29169eaa24a68b68a610d20d75a0, type: 2}
+  programDetails: "Aircraft Maintenance Engineering (AME)\n\nThe program has been
+    designed to serve market\u2019s needs in producing an aircraft maintenance professional
+    with hands-on skills development through high-quality facilities with realistic
+    working environment. VME Aircraft Maintenance students will learn how to operate
+    and use tools to become professional mechanic and engineer with in-depth knowledge
+    for troubleshooting aircrafts and real-world applications.\n\nCommercial Pilot
+    License (CPL)\n\nThe program has been designed to serve market\u2019s needs in
+    producing a commercial pilot with solid engineering background. VME Pilot students
+    will learn how to operate in-flight instruments with firm understanding on its
+    working principle, functionalities and limitations thanks to fundamental engineering
+    courses."
+  programHero: {fileID: 0}
+  programWebsiteUrl: https://vmes.au.edu/aircraft-maintenance-engineering-ame/
+  tuitionYear1: 168,300 Baht
+  tuitionYear2: 266,300 Baht
+  tuitionYear3: 586,700 Baht
+  tuitionYear4: '438,800 Baht '

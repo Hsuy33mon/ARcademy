@@ -15,4 +15,31 @@ MonoBehaviour:
   facultyId: IT
   displayName: Information Technology
   icon: {fileID: 21300000, guid: fab2540e791354ac3a147a973e6dd8d6, type: 3}
-  careers: []
+  careers:
+  - {fileID: 11400000, guid: e01d11c39e0584a34951343243ba3730, type: 2}
+  - {fileID: 11400000, guid: 6b33abc5d5a2341f2a324bee1f278e14, type: 2}
+  - {fileID: 11400000, guid: eb79f2c3b604843c99102ca6893145da, type: 2}
+  - {fileID: 11400000, guid: 70bbd619b4e6045a792d3211887a2fb5, type: 2}
+  - {fileID: 11400000, guid: f16643767b1aa4df1aeed050afb9a681, type: 2}
+  - {fileID: 11400000, guid: 8cff1ff494c4147fda5511bc8ad44bb1, type: 2}
+  - {fileID: 11400000, guid: 29902d8ac0381459d83412edb37028f5, type: 2}
+  - {fileID: 11400000, guid: 100d7bfae753f4151bb45279780aa6fc, type: 2}
+  - {fileID: 11400000, guid: 22fca0ef06ad94f9aa1fae3a94065a71, type: 2}
+  - {fileID: 11400000, guid: 2c2ecae24d0ea48b096e8017ba5b6736, type: 2}
+  - {fileID: 11400000, guid: 51bd29ce3920b457da23422cfee6a198, type: 2}
+  - {fileID: 11400000, guid: 64fc912c6b31e48fdb1092716e77386d, type: 2}
+  programDetails: According to the trend in manufacturing technologies and artificial
+    intelligence applications, the industries are increasingly moving towards automation
+    systems. To cope with this trend, the Bachelor of Science Program in Informatics
+    has been designed to incorporate both theoretical and pragmatic essence for data/system
+    analyst. The program ensures a suitable combination of lectures, laboratories
+    and workshops to accommodate sufficient practicalities in the curriculum. Students
+    are encouraged to gain experience on real control system designs via case studies,
+    projects, and internship opportunities as deemed appropriate in the existing
+    science programs.
+  programHero: {fileID: 0}
+  programWebsiteUrl: https://vmes.au.edu/2024-bsai-for-673-onward/
+  tuitionYear1: 217,250 Baht
+  tuitionYear2: 185,300 Baht
+  tuitionYear3: 141,500 Baht
+  tuitionYear4: 134,000 Baht

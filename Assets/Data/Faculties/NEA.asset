@@ -15,4 +15,32 @@ MonoBehaviour:
   facultyId: NEA
   displayName: New Energy Automotive Engineering
   icon: {fileID: 21300000, guid: d2f449ec6c1c743369ef4ddc96ba6081, type: 3}
-  careers: []
+  careers:
+  - {fileID: 11400000, guid: 7f2cdbc869f2b43f59593256694157d4, type: 2}
+  - {fileID: 11400000, guid: 4b20b339511d84c31954ac2c1e24dff0, type: 2}
+  - {fileID: 11400000, guid: 5df1faba808504e71a18330bdb973e95, type: 2}
+  - {fileID: 11400000, guid: b95be41155e8946e5a5ae52cfd43210d, type: 2}
+  - {fileID: 11400000, guid: e06f7a67f791944feaef4be28c560f4c, type: 2}
+  - {fileID: 11400000, guid: 35882c544ed8a41e3a64d1bf12ffc36c, type: 2}
+  - {fileID: 11400000, guid: 9fd94ddb3363a47daa4bdf583050de13, type: 2}
+  - {fileID: 11400000, guid: 365f56a04dcc44c8baabcb2838f67213, type: 2}
+  - {fileID: 11400000, guid: 5653d69e9f7014f10ad633885d58dab5, type: 2}
+  - {fileID: 11400000, guid: 61ef2768e9aad4e0a90155ddb219a2fe, type: 2}
+  - {fileID: 11400000, guid: d2d56339530a447d6a00a7373e0e4007, type: 2}
+  - {fileID: 11400000, guid: 09323e7de0e294215b56f869fd31f04c, type: 2}
+  - {fileID: 11400000, guid: 5c7f1b9158c474ba8a0886146d866f67, type: 2}
+  programDetails: "New Energy Automotive Engineering (NEAE) blends electrical, mechanical,
+    energy, computer, manufacturing, and management principles to design, build,
+    and maintain next-gen vehicles. Students study modules in inspection/maintenance,
+    intelligent & connected vehicles, marketing/service, and quality analysis, with
+    strong hands-on training via virtual simulations and professional labs. The program
+    emphasizes modern design philosophies from concept to deployment, preparing graduates
+    with the skills and mindset needed across many industries. Assumption University
+    offers a B.Eng. in NEAE to meet Thailand\u2019s demand, focusing on technical
+    depth, English proficiency, and ethics.\n"
+  programHero: {fileID: 0}
+  programWebsiteUrl: https://vmes.au.edu/new-energy-automotive-engineering-neae/
+  tuitionYear1: 224,850 Baht
+  tuitionYear2: 172,700 Baht
+  tuitionYear3: 153,800 Baht
+  tuitionYear4: 130,100 Baht

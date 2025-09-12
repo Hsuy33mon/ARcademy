@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89dc063b110a34c7fa8b51e0bc7c1e8b, type: 3}
-  m_Name: Data Engineer
+  m_Name: System Integration Engineer
   m_EditorClassIdentifier: 
-  displayName: Data Engineer
-  description: Build reliable data pipelines (batch/stream), design ETL/ELT, manage
-    data lakes/warehouses, ensure data quality and performance.
+  displayName: System Integration Engineer
+  description: Design APIs/integrations, orchestrate data flows, ensure reliability
+    and security.
   salaryRegion: Bangkok
-  salaryEntry: Baht 28,000-42,000
-  salaryMid: Baht 55,000-85,000
-  salarySenior: Baht 90,000-140,000
+  salaryEntry: Baht 30,000-45,000
+  salaryMid: Baht 55,000-90,000
+  salarySenior: Baht 100,000-150,000
   shirtSprite: {fileID: 0}
   glassesSprite: {fileID: 0}
   helmetSprite: {fileID: 0}

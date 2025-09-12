@@ -23,6 +23,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51bd29ce3920b457da23422cfee6a198, type: 2}
   - {fileID: 11400000, guid: 9057a5ff9060e4a78b300c55e0790dc8, type: 2}
   - {fileID: 11400000, guid: 5c81146ff853e480090246a6d7d639ef, type: 2}
+  - {fileID: 11400000, guid: 64fc912c6b31e48fdb1092716e77386d, type: 2}
   programDetails: "Undergraduates will find that our BSCS program emphasizes on developing
     the practicality of the knowledge to real-world use. Students learn not only
     the fundamentals of computer science, but also vigorously on how the knowledge
@@ -39,7 +40,7 @@ MonoBehaviour:
     projects or software innovations."
   programHero: {fileID: 0}
   programWebsiteUrl: https://vmes.au.edu/2022-bscs-653/
-  tuitionYear1: 179,300
-  tuitionYear2: 194,300
-  tuitionYear3: 187,000
-  tuitionYear4: 95,500
+  tuitionYear1: 179,300 Baht
+  tuitionYear2: 194,300 Baht
+  tuitionYear3: 187,000 Baht
+  tuitionYear4: 95,500 Baht
