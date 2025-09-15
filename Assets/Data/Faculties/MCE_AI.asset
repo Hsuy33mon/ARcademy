@@ -15,4 +15,25 @@ MonoBehaviour:
   facultyId: ME
   displayName: Mechatronics Engineering and Artificial Intelligence
   icon: {fileID: 21300000, guid: 7d5e98252a82b4418b0604af3a727616, type: 3}
-  careers: []
+  careers:
+  - {fileID: 11400000, guid: 9ffef8fcba3ff42849c7d1a533d0f7d4, type: 2}
+  - {fileID: 11400000, guid: 52f95d583009b49a5ad4f7c2f8da433f, type: 2}
+  - {fileID: 11400000, guid: f3dfce9908750439ca1627c30b257654, type: 2}
+  - {fileID: 11400000, guid: a2fba438329394fd58f62532c7effafa, type: 2}
+  - {fileID: 11400000, guid: a414306cc90844c40a73214fb3cdc82f, type: 2}
+  - {fileID: 11400000, guid: 5db328f211c0e42a6a83d8460f391127, type: 2}
+  - {fileID: 11400000, guid: 596aaa306e04e447bbc89b9557997958, type: 2}
+  - {fileID: 11400000, guid: 8ecd7bbe1b0a542de918e2f51b90b2bd, type: 2}
+  programDetails: 'The mechatronics engineering and artificial intelligence program
+    is specifically for those who are interested in the design, operation, and maintenance
+    of industrial automation systems. VME MCE-AI students develop both analytical
+    and programming skills to understand software and hardware aspects of mechatronics
+    systems and artificial intelligence.
+
+'
+  programHero: {fileID: 0}
+  programWebsiteUrl: https://vmes.au.edu/mechatronics-engineering-and-artificial-intelligence-mce-ai/
+  tuitionYear1: 153,800 Baht
+  tuitionYear2: 157,450 Baht
+  tuitionYear3: 120,000 Baht
+  tuitionYear4: 115,150 Baht

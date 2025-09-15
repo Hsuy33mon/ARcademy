@@ -15,4 +15,29 @@ MonoBehaviour:
   facultyId: ECE
   displayName: Electrical and Computer Engineering
   icon: {fileID: 21300000, guid: c3fdc817d262e465688c6aaab4b3037f, type: 3}
-  careers: []
+  careers:
+  - {fileID: 11400000, guid: 0f7a722320cbd45948b2a2f280154354, type: 2}
+  - {fileID: 11400000, guid: 199ba59920c2c46168b56afac0bdad27, type: 2}
+  - {fileID: 11400000, guid: 43a2147d3cdaf4ec68a8b67ea8fe4c6d, type: 2}
+  - {fileID: 11400000, guid: f1d1df8beb63c4c269ad0c63a4a75076, type: 2}
+  - {fileID: 11400000, guid: 4313bd3ded4d142039283d18e380ac57, type: 2}
+  - {fileID: 11400000, guid: 0f341578e600c448697e846962efa73f, type: 2}
+  - {fileID: 11400000, guid: 2eb3f052841fa42949bb2a851fbd8207, type: 2}
+  - {fileID: 11400000, guid: 95a9c157b375e4f719a3c1d40f9f3bb5, type: 2}
+  - {fileID: 11400000, guid: 02ce2214d9a624498bb32a094955ff0c, type: 2}
+  - {fileID: 11400000, guid: 8f27951c991114ab6aff49b9051d71cb, type: 2}
+  - {fileID: 11400000, guid: b15879540836f485b961b428b7406db2, type: 2}
+  - {fileID: 11400000, guid: 69e47311547b64a148fdc2c65d3a5761, type: 2}
+  - {fileID: 11400000, guid: 6dc29bb28a29e4def9c80e5beda370ac, type: 2}
+  programDetails: "Electrical & Computer Engineering (ECE) \u2014 A blended program
+    covering power electronics, electric machines & EV systems, renewable/solar energy
+    and smart grids (IoT/AI), signals & wireless communications, and control systems
+    together with strong foundations in programming across languages, computer architecture,
+    embedded systems, web/app development, and network design. Learning is hands-on
+    in modern labs with projects guided by experienced professors."
+  programHero: {fileID: 0}
+  programWebsiteUrl: https://vmes.au.edu/electrical-engineering-ee/
+  tuitionYear1: 242,850 Baht
+  tuitionYear2: 204,000 Baht
+  tuitionYear3: 154,200 Baht
+  tuitionYear4: 143,300 Baht

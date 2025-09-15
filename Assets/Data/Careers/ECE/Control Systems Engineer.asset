@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89dc063b110a34c7fa8b51e0bc7c1e8b, type: 3}
+  m_Name: Control Systems Engineer
+  m_EditorClassIdentifier: 
+  displayName: Control Systems Engineer
+  description: Program PLC/DCS, design feedback loops, tune PID, build SCADA/HMI,
+    ensure stability and safety interlocks.
+  salaryRegion: Bangkok
+  salaryEntry: Baht 24,000-36,000
+  salaryMid: Baht 45,000-70,000
+  salarySenior: Baht 80,000-120,000
+  shirtSprite: {fileID: 0}
+  glassesSprite: {fileID: 0}
+  helmetSprite: {fileID: 0}
+  shirtWidthMultiplier: 4.5
+  shirtNeckUp: 0.3
+  shirtCollarDown: 0.05
+  glassesWidthMultiplier: 3.2
+  glassesVerticalOffset: 0.08
+  helmetWidthMultiplier: 3.7
+  helmetUpFromEars: 0.1
+  helmetCrownDown: 0.04
