@@ -22,16 +22,15 @@ public class CareerUiFlow : MonoBehaviour
     public GameObject facultyButtonPrefab;     // root has Button+Image; child "Icon" Image; optional child "ring"
     public GameObject careerButtonPrefab;      // root has Button+Image; child "Label" TMP_Text; optional child "ring"
     public Button backButton;
+    public GameObject menuBarRoot;
 
     [Header("Info Cards")]
     public GameObject infoCard;
     public TMP_Text titleText;
     public TMP_Text descText;
-    public GameObject salaryCard;
-    public TMP_Text salaryTitle;
-    public TMP_Text salaryEntryValue;
-    public TMP_Text salaryMidValue;
-    public TMP_Text salarySeniorValue;
+    public TMP_Text bottomTitleText;
+    public GameObject bottomTitleCard;
+    // public TMP_Text averageSalaryText; 
 
     [Header("Overlays")]
     public Clothing2DOverlay shirtOverlay;
@@ -39,9 +38,15 @@ public class CareerUiFlow : MonoBehaviour
     public Helmet2DOverlay   helmetOverlay;
     public bool mirrorX = false;
 
+    [Header("Description → Faculty Badge")]
+    public GameObject descFacultyBadgeRoot; // FacultyBadge
+    public TMP_Text descFacultyBadgeTitle;  // Title
+    public Image descFacultyBadgeLogo;      // Logo
+    public TMP_Text descFacultyBadgeName;   // Name
+
     [Header("Input Mode (temporary)")]
     public bool clickMode = true;             
-    public HandScrollController handScroll;    
+    public HandScrollController handScroll; 
 
     enum Mode { Faculty, Career }
     Mode mode = Mode.Faculty;
@@ -52,6 +57,71 @@ public class CareerUiFlow : MonoBehaviour
     public GameObject careerTopBar;
     public GameObject logoBtn;
 
+    [Header("Description Panel (career details)")]
+    public GameObject descriptionPanel;
+
+    [Header("Top Action Buttons")]
+    public GameObject curriculumBtnRoot;     // the Curriculum button root GO
+    public GameObject programDetailsBtnRoot; // the Program Details button root GO
+
+    public void SetCurriculumBtnEnabled(bool on)
+    {
+        SetButtonEnabled(curriculumBtnRoot, on);
+    }
+    public void SetProgramBtnEnabled(bool on)
+    {
+        SetButtonEnabled(programDetailsBtnRoot, on);
+    }
+
+    void UpdateDescFacultyBadge(FacultyConfig f)
+    {
+        if (!descFacultyBadgeRoot) return;
+
+        bool show = (f != null);
+        descFacultyBadgeRoot.SetActive(show);
+        if (!show) return;
+
+        if (descFacultyBadgeTitle)
+            descFacultyBadgeTitle.text = "Programs you can join";
+
+        if (descFacultyBadgeLogo)
+        {
+            descFacultyBadgeLogo.sprite = f.icon;
+            descFacultyBadgeLogo.enabled = (f.icon != null);
+            // If you want a fallback color/placeholder, set it here.
+        }
+
+        if (descFacultyBadgeName)
+            descFacultyBadgeName.text = string.IsNullOrEmpty(f.displayName) ? f.facultyId : f.displayName;
+    }
+
+    void SetButtonEnabled(GameObject root, bool on)
+    {
+        if (!root) return;
+
+        // Button click
+        var btn = root.GetComponent<Button>();
+        if (btn) btn.interactable = on;
+
+        // Hand dwell
+        var dwell = root.GetComponent<HandDwellSelectable>();
+        if (dwell) dwell.enabled = on;
+
+        // Block raycasts + optionally dim
+        var cg = root.GetComponent<CanvasGroup>();
+        if (!cg) cg = root.AddComponent<CanvasGroup>(); // safe add once
+        cg.interactable = on;
+        cg.blocksRaycasts = on;
+        cg.alpha = on ? 1f : 0.5f; // dim when disabled (tweak if you want)
+    }
+
+
+    // Is a career currently selected?
+    public bool HasSelectedCareer =>
+        currentCareer >= 0 &&
+        activeCareers != null &&
+        currentCareer < activeCareers.Length;   
+
     public FacultyConfig CurrentFaculty
     {
         get
@@ -61,6 +131,19 @@ public class CareerUiFlow : MonoBehaviour
             return null;
         }
     }
+
+    // Set visibility directly
+    public void SetDescriptionVisible(bool on)
+    {
+        if (descriptionPanel) descriptionPanel.SetActive(on);
+    }
+
+    // Decide automatically based on whether a career is selected
+    public void RefreshDescriptionVisibility()
+    {
+        SetDescriptionVisible(HasSelectedCareer);
+    }
+
 
     void Start()
     {
@@ -102,6 +185,91 @@ public class CareerUiFlow : MonoBehaviour
         if (logoBtn) logoBtn.SetActive(on);
     }
 
+    // void OnSearchSubmitted(string query)
+    // {
+    //     if (menuBar) menuBar.gameObject.SetActive(true);
+
+    //     string q = (query ?? "").Trim();
+    //     if (string.IsNullOrEmpty(q)) { ShowFacultyList(); return; }
+
+    //     // ---- collect faculties by (name/id) OR (career match) ----
+    //     var filtered = new List<FacultyConfig>();
+    //     var seen = new HashSet<FacultyConfig>();
+
+    //     bool ContainsIC(string hay, string needle)
+    //     {
+    //         if (string.IsNullOrEmpty(needle)) return true;
+    //         if (string.IsNullOrEmpty(hay)) return false;
+    //         return hay.IndexOf(needle, StringComparison.OrdinalIgnoreCase) >= 0;
+    //     }
+
+    //     // preserve the order of the master 'faculties' array
+    //     foreach (var f in faculties)
+    //     {
+    //         bool byName = ContainsIC(f.displayName, q) || ContainsIC(f.facultyId, q);
+
+    //         bool byCareer = false;
+    //         if (f.careers != null)
+    //         {
+    //             foreach (var c in f.careers)
+    //             {
+    //                 if (ContainsIC(c.displayName, q)) { byCareer = true; break; }
+    //             }
+    //         }
+
+    //         if (byName || byCareer)
+    //         {
+    //             if (seen.Add(f)) filtered.Add(f);
+    //         }
+    //     }
+
+    //     // If any faculty matches (by name or via its careers) → show only those faculties
+    //     if (filtered.Count > 0)
+    //     {
+    //         ShowFacultyListFiltered(filtered.ToArray());
+    //         if (!clickMode) PrimeMenuCooldown(0.75f);
+    //         return;
+    //     }
+
+    //     // Otherwise, as a fallback, show a flat career list (rare for your use case)
+    //     var matchedCareers = new List<CareerConfig>();
+    //     foreach (var f in faculties)
+    //         if (f.careers != null)
+    //             foreach (var c in f.careers)
+    //                 if (!string.IsNullOrEmpty(c.displayName) &&
+    //                     c.displayName.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0)
+    //                     matchedCareers.Add(c);
+
+    //     if (matchedCareers.Count > 0)
+    //     {
+    //         mode = Mode.Career;
+    //         if (backButton)
+    //         {
+    //             backButton.gameObject.SetActive(true);
+    //             backButton.onClick.RemoveAllListeners();
+    //             backButton.onClick.AddListener(() => ShowFacultyList());
+    //         }
+
+    //         activeCareers = matchedCareers.ToArray();   // ⬅️ important (see fix #2)
+    //         BuildCareerButtons(activeCareers);
+    //         if (!clickMode) PrimeMenuCooldown(0.75f);
+    //     }
+    //     else
+    //     {
+    //         ShowFacultyList();
+    //     }
+    //     if (careerTopBar) careerTopBar.SetActive(false);
+
+    // }
+
+    bool ContainsIC(string hay, string needle)
+    {
+        if (string.IsNullOrEmpty(needle)) return true;
+        if (string.IsNullOrEmpty(hay)) return false;
+        return hay.IndexOf(needle, StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+
     void OnSearchSubmitted(string query)
     {
         if (menuBar) menuBar.gameObject.SetActive(true);
@@ -109,10 +277,7 @@ public class CareerUiFlow : MonoBehaviour
         string q = (query ?? "").Trim();
         if (string.IsNullOrEmpty(q)) { ShowFacultyList(); return; }
 
-        // ---- collect faculties by (name/id) OR (career match) ----
-        var filtered = new List<FacultyConfig>();
-        var seen = new HashSet<FacultyConfig>();
-
+        // case-insensitive "contains"
         bool ContainsIC(string hay, string needle)
         {
             if (string.IsNullOrEmpty(needle)) return true;
@@ -120,27 +285,27 @@ public class CareerUiFlow : MonoBehaviour
             return hay.IndexOf(needle, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        // preserve the order of the master 'faculties' array
+        // ---- ONLY faculties whose careers match the query ----
+        var filtered = new List<FacultyConfig>();
         foreach (var f in faculties)
         {
-            bool byName = ContainsIC(f.displayName, q) || ContainsIC(f.facultyId, q);
-
-            bool byCareer = false;
+            bool hasCareerMatch = false;
             if (f.careers != null)
             {
                 foreach (var c in f.careers)
                 {
-                    if (ContainsIC(c.displayName, q)) { byCareer = true; break; }
+                    if (!string.IsNullOrEmpty(c?.displayName) &&
+                        ContainsIC(c.displayName, q))   // ← case-insensitive
+                    {
+                        hasCareerMatch = true;
+                        break;
+                    }
                 }
             }
-
-            if (byName || byCareer)
-            {
-                if (seen.Add(f)) filtered.Add(f);
-            }
+            if (hasCareerMatch) filtered.Add(f);
         }
 
-        // If any faculty matches (by name or via its careers) → show only those faculties
+
         if (filtered.Count > 0)
         {
             ShowFacultyListFiltered(filtered.ToArray());
@@ -148,36 +313,11 @@ public class CareerUiFlow : MonoBehaviour
             return;
         }
 
-        // Otherwise, as a fallback, show a flat career list (rare for your use case)
-        var matchedCareers = new List<CareerConfig>();
-        foreach (var f in faculties)
-            if (f.careers != null)
-                foreach (var c in f.careers)
-                    if (!string.IsNullOrEmpty(c.displayName) &&
-                        c.displayName.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0)
-                        matchedCareers.Add(c);
-
-        if (matchedCareers.Count > 0)
-        {
-            mode = Mode.Career;
-            if (backButton)
-            {
-                backButton.gameObject.SetActive(true);
-                backButton.onClick.RemoveAllListeners();
-                backButton.onClick.AddListener(() => ShowFacultyList());
-            }
-
-            activeCareers = matchedCareers.ToArray();   // ⬅️ important (see fix #2)
-            BuildCareerButtons(activeCareers);
-            if (!clickMode) PrimeMenuCooldown(0.75f);
-        }
-        else
-        {
-            ShowFacultyList();
-        }
+        // Nothing matched → show full faculty list (or keep previous results)
+        ShowFacultyList();
         if (careerTopBar) careerTopBar.SetActive(false);
-
     }
+
 
     void ShowFacultyListFiltered(FacultyConfig[] filtered)
     {
@@ -189,7 +329,7 @@ public class CareerUiFlow : MonoBehaviour
         if (backButton) backButton.gameObject.SetActive(false);
 
         if (infoCard) infoCard.SetActive(false);
-        if (salaryCard) salaryCard.SetActive(false);
+        if (bottomTitleCard) bottomTitleCard.SetActive(false);
         SetOverlaysActive(false, false, false);
         if (careerTopBar) careerTopBar.SetActive(false);
         SetLogoVisible(true);
@@ -294,31 +434,66 @@ public class CareerUiFlow : MonoBehaviour
 
     void BuildCareerButtons(CareerConfig[] list)
     {
-        // activeCareers = list ?? Array.Empty<CareerConfig>();
         ClearMenuBar();
         var content = menuBar.content;
 
-        for (int i = 0; i < list.Length; i++)
+        for (int i = 0; i < (list?.Length ?? 0); i++)
         {
             var cfg = list[i];
-            var go  = Instantiate(careerButtonPrefab, content);
-            go.name = "Career_" + cfg.displayName;
+            var root = Instantiate(careerButtonPrefab, content);
+            root.name = "Career_" + (cfg ? cfg.displayName : $"#{i}");
 
-            var labelTr = go.transform.Find("Label");
-            var tmp = labelTr ? labelTr.GetComponent<TMP_Text>() : null;
-            var txt = labelTr ? labelTr.GetComponent<Text>()     : null;
-            if (tmp) tmp.text = cfg.displayName;
-            else if (txt) txt.text = cfg.displayName;
-            else Debug.LogWarning("Career button prefab needs a child 'Label' with TMP_Text or Text.");
+            // find label flexibly
+            TMP_Text tmp = root.transform.Find("Label")?.GetComponent<TMP_Text>()
+                           ?? root.GetComponentInChildren<TMP_Text>(true);
+            if (tmp) tmp.text = cfg ? cfg.displayName : "Unnamed";
 
-            int idx = i;
-            go.GetComponent<Button>().onClick.AddListener(() => SelectCareer(idx));
-            ConfigureDwell(go, () => SelectCareer(idx));
+            // 🔧 the important change: find Button anywhere under the prefab
+            var btn = root.GetComponentInChildren<Button>(true);
+            if (!btn)
+            {
+                Debug.LogError($"{root.name} has no Button in children. Put a Button on the clickable GO.");
+                continue;
+            }
+
+            int idxLocal = i;
+            btn.onClick.AddListener(() => SelectCareer(idxLocal));
+
+            // wire dwell on the clickable button object (not necessarily the root)
+            ConfigureDwell(btn.gameObject, () => SelectCareer(idxLocal));
         }
 
         menuBar.horizontalNormalizedPosition = 0f;
         if (!clickMode) PrimeMenuCooldown(0.75f);
     }
+
+    // void BuildCareerButtons(CareerConfig[] list)
+    // {
+    //     // activeCareers = list ?? Array.Empty<CareerConfig>();
+    //     ClearMenuBar();
+    //     var content = menuBar.content;
+
+    //     for (int i = 0; i < list.Length; i++)
+    //     {
+    //         var cfg = list[i];
+    //         var go  = Instantiate(careerButtonPrefab, content);
+    //         go.name = "Career_" + cfg.displayName;
+
+    //         var labelTr = go.transform.Find("Label");
+    //         var tmp = labelTr ? labelTr.GetComponent<TMP_Text>() : null;
+    //         var txt = labelTr ? labelTr.GetComponent<Text>()     : null;
+    //         if (tmp) tmp.text = cfg.displayName;
+    //         else if (txt) txt.text = cfg.displayName;
+    //         else Debug.LogWarning("Career button prefab needs a child 'Label' with TMP_Text or Text.");
+
+    //         int idx = i;
+    //         go.GetComponent<Button>().onClick.AddListener(() => SelectCareer(idx));
+    //         ConfigureDwell(go, () => SelectCareer(idx));
+    //     }
+
+    //     menuBar.horizontalNormalizedPosition = 0f;
+    //     if (!clickMode) PrimeMenuCooldown(0.75f);
+    // }
 
     // Wire per-button dwell
     void ConfigureDwell(GameObject go, UnityAction onSelect)
@@ -370,10 +545,12 @@ public class CareerUiFlow : MonoBehaviour
         if (backButton) backButton.gameObject.SetActive(false);
 
         if (infoCard) infoCard.SetActive(false);
-        if (salaryCard) salaryCard.SetActive(false);
+        if (bottomTitleCard) bottomTitleCard.SetActive(false);
         SetOverlaysActive(false, false, false);
         if (careerTopBar) careerTopBar.SetActive(false);
         SetLogoVisible(true);
+        SetDescriptionVisible(false);
+        UpdateDescFacultyBadge(null);
     }
 
     void ShowCareerList()
@@ -391,9 +568,10 @@ public class CareerUiFlow : MonoBehaviour
         }
 
         if (infoCard) infoCard.SetActive(false);
-        if (salaryCard) salaryCard.SetActive(false);
+        if (bottomTitleCard) bottomTitleCard.SetActive(false);
         SetOverlaysActive(false, false, false);
-        SetLogoVisible(false);
+        SetLogoVisible(true);
+        SetDescriptionVisible(false);
     }
 
     // ---------- SELECTIONS ----------
@@ -404,9 +582,22 @@ public class CareerUiFlow : MonoBehaviour
         currentFaculty = idx;
         if (careerTopBar) careerTopBar.SetActive(true); 
         activeCareers  = faculties[idx].careers ?? new CareerConfig[0];
+        UpdateDescFacultyBadge(faculties[idx]); 
 
         ShowCareerList();
         BuildCareerButtons(activeCareers);
+    }
+
+    public void SetMenuBarVisible(bool on)
+    {
+        if (!menuBar) return;
+        menuBar.gameObject.SetActive(on);
+        menuBarRoot.SetActive(on);
+
+        // also disable dwell on menu buttons while hidden
+        if (menuBar.content)
+            foreach (var sel in menuBar.content.GetComponentsInChildren<HandDwellSelectable>(true))
+                sel.enabled = on ? !clickMode : false;
     }
 
     public void SelectCareer(int idx)
@@ -414,7 +605,7 @@ public class CareerUiFlow : MonoBehaviour
         if (activeCareers == null || idx < 0 || idx >= activeCareers.Length) return;
         currentCareer = idx;
         ApplyCareer(activeCareers[idx]);
-        SetLogoVisible(false);
+        SetLogoVisible(true);
     }
 
     void ConfigureBackButtonDwell()
@@ -459,32 +650,77 @@ public class CareerUiFlow : MonoBehaviour
     }
 
     // ---------- APPLY DATA ----------
+    // void ApplyCareer(CareerConfig cfg)
+    // {
+    //     if (infoCard) infoCard.SetActive(true);
+    //     if (titleText) titleText.text = cfg.displayName;
+    //     if (descText)  descText.text  = cfg.description;
+
+    //     if (shirtOverlay && shirtOverlay.clothingRect)
+    //     {
+    //         var img = shirtOverlay.clothingRect.GetComponent<Image>();
+    //         if (img) img.sprite = cfg.shirtSprite;
+    //         shirtOverlay.widthMultiplier     = cfg.shirtWidthMultiplier;
+    //         shirtOverlay.neckUpFromShoulders = cfg.shirtNeckUp;
+    //         shirtOverlay.collarDown          = cfg.shirtCollarDown;
+    //         shirtOverlay.gameObject.SetActive(cfg.shirtSprite != null);
+    //     }
+    //     if (glassesOverlay && glassesOverlay.glassesRect)
+    //     {
+    //         var img = glassesOverlay.glassesRect.GetComponent<Image>();
+    //         if (img) img.sprite = cfg.glassesSprite;
+    //         glassesOverlay.widthMultiplier = cfg.glassesWidthMultiplier;
+    //         glassesOverlay.verticalOffset  = cfg.glassesVerticalOffset;
+    //         glassesOverlay.gameObject.SetActive(cfg.glassesSprite != null);
+    //     }
+    //     if (helmetOverlay && helmetOverlay.helmetRect)
+    //     {
+    //         var img = helmetOverlay.helmetRect.GetComponent<Image>();
+    //         if (img) img.sprite = cfg.helmetSprite;
+    //         helmetOverlay.widthMultiplier = cfg.helmetWidthMultiplier;
+    //         helmetOverlay.upFromEars      = cfg.helmetUpFromEars;
+    //         // If your CareerConfig doesn't have this next field, remove the line:
+    //         // helmetOverlay.crownDown       = cfg.helmetCrownDown;
+    //         helmetOverlay.gameObject.SetActive(cfg.helmetSprite != null);
+    //     }
+    // }
+
     void ApplyCareer(CareerConfig cfg)
     {
+        if (!cfg) return;
+
         if (infoCard) infoCard.SetActive(true);
-        if (titleText) titleText.text = cfg.displayName;
-        if (descText)  descText.text  = cfg.description;
+        if (bottomTitleCard) bottomTitleCard.SetActive(true);
 
-        bool hasAnySalary = !string.IsNullOrWhiteSpace(cfg.salaryEntry)
-                         || !string.IsNullOrWhiteSpace(cfg.salaryMid)
-                         || !string.IsNullOrWhiteSpace(cfg.salarySenior);
+        // Title
+        if (titleText)
+            titleText.text = $"{cfg.displayName}";
 
-        if (salaryCard) salaryCard.SetActive(hasAnySalary);
-        if (hasAnySalary)
+        if (bottomTitleText)
         {
-            if (salaryTitle)      salaryTitle.text      = $"Average Salary in {cfg.salaryRegion}";
-            if (salaryEntryValue) salaryEntryValue.text = cfg.salaryEntry  ?? "";
-            if (salaryMidValue)   salaryMidValue.text   = cfg.salaryMid    ?? "";
-            if (salarySeniorValue)salarySeniorValue.text= cfg.salarySenior ?? "";
+            bottomTitleText.text = $"I am a {cfg.displayName}";
         }
 
+
+        // Description: original description + Average salary (if provided)
+        string body = cfg.description ?? "";
+        if (!string.IsNullOrWhiteSpace(cfg.averageSalary))
+        {
+            string region = string.IsNullOrWhiteSpace(cfg.salaryRegion) ? "Bangkok" : cfg.salaryRegion;
+            body += $"\n\n<b>Average salary ({region})</b>: {cfg.averageSalary}";
+        }
+        if (descText)
+            descText.text = body;
+
+
+        // ---- overlays (unchanged) ----
         if (shirtOverlay && shirtOverlay.clothingRect)
         {
             var img = shirtOverlay.clothingRect.GetComponent<Image>();
             if (img) img.sprite = cfg.shirtSprite;
-            shirtOverlay.widthMultiplier     = cfg.shirtWidthMultiplier;
+            shirtOverlay.widthMultiplier = cfg.shirtWidthMultiplier;
             shirtOverlay.neckUpFromShoulders = cfg.shirtNeckUp;
-            shirtOverlay.collarDown          = cfg.shirtCollarDown;
+            shirtOverlay.collarDown = cfg.shirtCollarDown;
             shirtOverlay.gameObject.SetActive(cfg.shirtSprite != null);
         }
         if (glassesOverlay && glassesOverlay.glassesRect)
@@ -492,7 +728,7 @@ public class CareerUiFlow : MonoBehaviour
             var img = glassesOverlay.glassesRect.GetComponent<Image>();
             if (img) img.sprite = cfg.glassesSprite;
             glassesOverlay.widthMultiplier = cfg.glassesWidthMultiplier;
-            glassesOverlay.verticalOffset  = cfg.glassesVerticalOffset;
+            glassesOverlay.verticalOffset = cfg.glassesVerticalOffset;
             glassesOverlay.gameObject.SetActive(cfg.glassesSprite != null);
         }
         if (helmetOverlay && helmetOverlay.helmetRect)
@@ -500,12 +736,13 @@ public class CareerUiFlow : MonoBehaviour
             var img = helmetOverlay.helmetRect.GetComponent<Image>();
             if (img) img.sprite = cfg.helmetSprite;
             helmetOverlay.widthMultiplier = cfg.helmetWidthMultiplier;
-            helmetOverlay.upFromEars      = cfg.helmetUpFromEars;
-            // If your CareerConfig doesn't have this next field, remove the line:
-            // helmetOverlay.crownDown       = cfg.helmetCrownDown;
+            helmetOverlay.upFromEars = cfg.helmetUpFromEars;
+            // helmetOverlay.crownDown     = cfg.helmetCrownDown; // keep only if your overlay has this prop
             helmetOverlay.gameObject.SetActive(cfg.helmetSprite != null);
         }
+        SetDescriptionVisible(true);
     }
+
 
     void SetOverlaysActive(bool shirt, bool glasses, bool helmet)
     {

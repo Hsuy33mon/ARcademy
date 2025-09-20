@@ -40,7 +40,4 @@ MonoBehaviour:
     projects or software innovations."
   programHero: {fileID: 0}
   programWebsiteUrl: https://vmes.au.edu/2022-bscs-653/
-  tuitionYear1: 179,300 Baht
-  tuitionYear2: 194,300 Baht
-  tuitionYear3: 187,000 Baht
-  tuitionYear4: 95,500 Baht
+  curriculum: {fileID: 11400000, guid: ab6ee059432b54008a261497e80cd97e, type: 2}

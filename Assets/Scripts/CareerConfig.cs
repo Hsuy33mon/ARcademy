@@ -7,12 +7,9 @@ public class CareerConfig : ScriptableObject
     public string displayName;
     [TextArea(2, 100)] public string description;
 
-    [Header("Salary (optional)")]
+    [Header("Salary")]
     public string salaryRegion = "Bangkok";
-    [TextArea] public string salaryEntry;
-    [TextArea] public string salaryMid;
-    [TextArea] public string salarySenior;
-
+    [TextArea] public string averageSalary; // single salary field
 
     [Header("Sprites (2D overlays)")]
     public Sprite shirtSprite;

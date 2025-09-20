@@ -1,0 +1,128 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbdbfe1a042d84d9cb3c95a3771752ba, type: 3}
+  m_Name: CS_curriculum
+  m_EditorClassIdentifier: 
+  facultyId: CS
+  years:
+  - semester1:
+      subjects:
+      - name: 'Communicative English I '
+        credits: 3
+      - name: Essential Marketing for Entrepreneurs
+        credits: 2
+      - name: Science for Sustainable Future
+        credits: 2
+      - name: Principles of Statistics
+        credits: 3
+      - name: ' Introduction to Information Technology '
+        credits: 3
+      - name: Fundamentals of Computer Programming
+        credits: 3
+    semester2:
+      subjects:
+      - name: Communicative English II
+        credits: 3
+      - name: Essential Finance for Entrepreneurs
+        credits: 2
+      - name: Mathematics and Statistics for Data Science
+        credits: 3
+      - name: Design Thinking
+        credits: 3
+      - name: 'Object-Oriented Concepts and Programming '
+        credits: 3
+      - name: Data Science
+        credits: 3
+  - semester1:
+      subjects:
+      - name: Academic English
+        credits: 3
+      - name: Essential Economics for Entrepreneurs
+        credits: 2
+      - name: Human Civilizations and Global Citizens
+        credits: 2
+      - name: Mathematics Foundation for Computer Science
+        credits: 3
+      - name: 'Data Structures and Algorithms '
+        credits: 3
+      - name: Cloud Computing
+        credits: 3
+    semester2:
+      subjects:
+      - name: Advanced Academic English
+        credits: 3
+      - name: Ethics
+        credits: 3
+      - name: Data Analytics for Entrepreneurs
+        credits: 2
+      - name: ' Software Engineering'
+        credits: 3
+      - name: 'Programming Languages '
+        credits: 3
+      - name: Computer Networks
+        credits: 3
+  - semester1:
+      subjects:
+      - name: Thai Language for Multicultural Communication
+        credits: 2
+      - name: Algorithm Design
+        credits: 3
+      - name: Database Systems
+        credits: 3
+      - name: Web Application Development
+        credits: 3
+      - name: Free Elective
+        credits: 3
+      - name: UI/UX Design and Prototyping
+        credits: 3
+    semester2:
+      subjects:
+      - name: Operating Systems
+        credits: 3
+      - name: Computer Architecture
+        credits: 3
+      - name: Information System Analysis and Design
+        credits: 3
+      - name: Android Application Development
+        credits: 3
+      - name: Game Design and Development
+        credits: 3
+      - name: Free Elective
+        credits: 3
+  - semester1:
+      subjects:
+      - name: 'Software Testing '
+        credits: 3
+      - name: Backend Application Development
+        credits: 3
+      - name: iOS Application Development
+        credits: 3
+      - name: Free Elective
+        credits: 3
+      - name: Big Data Analytics
+        credits: 3
+      - name: Senior Project 1
+        credits: 3
+    semester2:
+      subjects:
+      - name: Machine Learning
+        credits: 3
+      - name: Computer Vision
+        credits: 3
+      - name: ' Decision Support and Recommender Systems '
+        credits: 3
+      - name: Free Elective
+        credits: 3
+      - name: Free Elective
+        credits: 3
+      - name: Senior Project 2
+        credits: 3

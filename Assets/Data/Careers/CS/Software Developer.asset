@@ -15,9 +15,7 @@ MonoBehaviour:
   displayName: Software Developer
   description: ' Design,code and maintain software application.'
   salaryRegion: Bangkok
-  salaryEntry: Baht 25,000-35,000
-  salaryMid: Baht 45,000-70,000
-  salarySenior: Baht 85,000-120,000
+  averageSalary: 35,000 - 120,000 baht
   shirtSprite: {fileID: 21300000, guid: ddc2428bfdfcd4889955c751ad925463, type: 3}
   glassesSprite: {fileID: 21300000, guid: 4020afb14ff8e4ff58f49d96afe56753, type: 3}
   helmetSprite: {fileID: 21300000, guid: dd56422de091b41348ed5625df235584, type: 3}
